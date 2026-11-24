@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>TrackTheFuture</title>
+<meta name="description" content="TrackTheFuture – catat tryout UTBK, SKD, nilai jasmani, dan buku catatan SKD.">
+<meta name="theme-color" content="#4f46e5">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%236366f1'/%3E%3Cstop offset='1' stop-color='%234338ca'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='48' height='48' rx='12' fill='url(%23g)'/%3E%3Cpath d='M9 35L18 27L24 31L32.5 19.5' fill='none' stroke='white' stroke-width='3.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3Ccircle cx='9' cy='35' r='2.6' fill='white'/%3E%3Cpath d='M35 7C35.8 11 38 13.2 42 14C38 14.8 35.8 17 35 21C34.2 17 32 14.8 28 14C32 13.2 34.2 11 35 7Z' fill='white'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+<script src="https://cdn.tailwindcss.com/3.4.17"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.1/dist/cdn.min.js"></script>
+<style>
+  .inp{width:100%;border-radius:.75rem;border:1px solid #e2e8f0;background:#fff;padding:.625rem 1rem;font-size:.875rem;color:#1e293b;outline:none;transition:all .3s}.inp::placeholder{color:#94a3b8}.inp:focus{border-color:#6366f1;box-shadow:0 0 0 4px #e0e7ff}
+  .card{border-radius:1rem;background:#fff;padding:1.5rem;box-shadow:0 1px 2px rgba(15,23,42,.05);box-shadow:0 0 0 1px #f1f5f9;transition:box-shadow .3s}.card:hover{box-shadow:0 4px 12px rgba(15,23,42,.12)}
+  .lbl{margin-bottom:.375rem;display:block;font-size:.875rem;font-weight:500;color:#334155}
+  .btn{border:0;border-radius:.75rem;background:#4f46e5;padding:.75rem 1.25rem;font-size:.875rem;font-weight:600;color:#fff;box-shadow:0 1px 2px rgba(15,23,42,.05);transition:all .3s}.btn:hover{background:#4338ca}.btn:focus{outline:none;box-shadow:0 0 0 4px #c7d2fe}.btn:active{transform:scale(.99)}
+  .btn2{border-radius:.75rem;border:1px solid #e2e8f0;padding:.625rem 1rem;font-size:.875rem;font-weight:500;color:#475569;transition:all .3s}.btn2:hover{background:#f8fafc}
+  .row{min-width:0;flex:1;border-radius:.75rem;background:#f8fafc;padding:.625rem 1rem;box-shadow:0 0 0 1px #f1f5f9}
+  .box{border-radius:.75rem;background:#f8fafc;padding:.875rem 1rem;box-shadow:0 0 0 1px #f1f5f9}
+  .tb{display:flex;height:2rem;min-width:2rem;align-items:center;justify-content:center;border-radius:.5rem;padding:0 .5rem;font-size:.875rem;color:#475569;transition:all .3s}.tb:hover{background:#f1f5f9}
+  .sel{border-radius:.5rem;border:1px solid #e2e8f0;background:#fff;padding:.375rem .5rem;font-size:.75rem;color:#334155;outline:none}.sel:focus{border-color:#6366f1}
+  .chip{border-radius:9999px;padding:.375rem .875rem;font-size:.75rem;font-weight:600;box-shadow:0 0 0 1px #e2e8f0;transition:all .3s}
+  .ttl{font-size:.75rem;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:#94a3b8}
+</style>
+<style>
+  body{font-family:'Inter',ui-sans-serif,system-ui,sans-serif;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+  @keyframes up{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  .fade-in-up{animation:up .45s ease-out both}
+  @keyframes pulse2{0%,100%{box-shadow:0 0 0 0 var(--ring)}50%{box-shadow:0 0 0 10px transparent}}
+  .badge-pulse{animation:pulse2 2.2s ease-in-out infinite}
+  input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
+  input[type=number]{-moz-appearance:textfield;appearance:textfield}
+  [x-cloak]{display:none!important}
+  .ed{min-height:20rem;line-height:1.75;outline:none;word-break:break-word}
+  .ed ul{list-style:disc;padding-left:1.5rem}.ed ol{list-style:decimal;padding-left:1.5rem}
+  .ed:empty:before{content:attr(data-ph);color:#94a3b8}
+</style>
+</head>
+<body class="min-h-screen bg-slate-50 text-slate-800 antialiased">
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><linearGradient id="ttfGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#6366f1"/><stop offset="1" stop-color="#4338ca"/></linearGradient></defs>
+<symbol id="ttf-logo" viewBox="0 0 48 48"><rect width="48" height="48" rx="12" fill="url(#ttfGrad)"/><path d="M9 35 L18 27 L24 31 L32.5 19.5" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="9" cy="35" r="2.6" fill="#fff"/><path d="M35 7C35.8 11 38 13.2 42 14C38 14.8 35.8 17 35 21C34.2 17 32 14.8 28 14C32 13.2 34.2 11 35 7Z" fill="#fff"/></symbol></svg>
+
+<div x-data="tryoutTracker()" x-init="init()" x-cloak>
+
+<!-- ===== LOGIN ===== -->
+<section x-show="!profil" class="mx-auto flex min-h-screen max-w-md flex-col justify-center px-4 py-10">
+ <div class="fade-in-up">
+  <div class="mb-8 text-center">
+   <svg class="mx-auto mb-4 h-14 w-14 drop-shadow-md" viewBox="0 0 48 48" role="img" aria-label="Logo"><use href="#ttf-logo"/></svg>
+   <h1 class="text-3xl font-bold tracking-tight text-slate-900">Track<span class="font-medium text-slate-400">The</span><span class="text-indigo-600">Future</span></h1>
+   <p class="mt-1 text-sm text-slate-500">Lacak progres belajarmu hari ini, raih masa depan yang kamu tuju.</p>
+  </div>
+  <form @submit.prevent="masuk()" class="card space-y-5 sm:p-8" novalidate>
+   <div><p class="lbl">Masuk dengan</p>
+    <div class="grid grid-cols-3 gap-1 rounded-xl bg-slate-50 p-1 ring-1 ring-slate-100">
+     <template x-for="m in METODE" :key="m.id">
+      <button type="button" @click="loginForm.metode=m.id;loginForm.kontak='';errorLogin=''" class="rounded-lg px-2 py-2 text-sm font-semibold transition" :class="loginForm.metode===m.id?'bg-white text-indigo-600 shadow-sm ring-1 ring-slate-100':'text-slate-500 hover:text-slate-800'" x-text="m.label"></button>
+     </template>
+    </div></div>
+   <div><label for="loginKontak" class="lbl" x-text="metodeAktif.field"></label>
+    <input id="loginKontak" :type="metodeAktif.type" x-model="loginForm.kontak" :placeholder="metodeAktif.ph" autocomplete="username" class="inp"></div>
+   <div x-show="akunAda" class="flex items-center gap-3 rounded-xl bg-emerald-50 px-4 py-3 ring-1 ring-emerald-100">
+    <div class="h-12 w-12 shrink-0 overflow-hidden rounded-full bg-white ring-2 ring-emerald-200">
+     <img x-show="akunAda&&akunAda.profil.foto" :src="akunAda?akunAda.profil.foto:''" alt="" class="h-full w-full object-cover">
+     <div x-show="akunAda&&!akunAda.profil.foto" class="flex h-full w-full items-center justify-center text-lg font-bold text-emerald-600" x-text="akunAda?akunAda.profil.nama.charAt(0).toUpperCase():''"></div>
+    </div>
+    <p class="min-w-0 text-sm text-emerald-700">Akun ditemukan: <b class="break-words" x-text="akunAda?akunAda.profil.nama:''"></b>. Profil, riwayat, dan catatanmu dimuat otomatis.</p>
+   </div>
+   <div x-show="!akunAda" class="space-y-5">
+    <div class="flex items-center gap-4">
+     <div class="h-20 w-20 shrink-0 overflow-hidden rounded-full bg-indigo-50 ring-2 ring-indigo-100">
+      <img x-show="loginForm.foto" :src="loginForm.foto" alt="Foto profil" class="h-full w-full object-cover">
+      <div x-show="!loginForm.foto" class="flex h-full w-full items-center justify-center text-2xl font-bold text-indigo-600" x-text="(loginForm.nama.trim().charAt(0)||'?').toUpperCase()"></div>
+     </div>
+     <div class="min-w-0"><label class="lbl">Foto Profil <span class="font-normal text-slate-400">(opsional)</span></label>
+      <input type="file" accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp" @change="pilihFoto($event,loginForm)" class="block w-full text-xs text-slate-500 file:mr-3 file:rounded-lg file:border-0 file:bg-indigo-50 file:px-3 file:py-1.5 file:text-xs file:font-semibold file:text-indigo-600 hover:file:bg-indigo-100">
+      <button type="button" x-show="loginForm.foto" @click="loginForm.foto=''" class="mt-1 text-xs text-rose-500">Hapus foto</button></div>
+    </div>
+    <div><label for="loginNama" class="lbl">Nama Lengkap</label><input id="loginNama" type="text" x-model="loginForm.nama" placeholder="Nama lengkapmu" autocomplete="name" class="inp"></div>
+    <div><label for="loginLahir" class="lbl">Tanggal Lahir</label><input id="loginLahir" type="date" x-model="loginForm.lahir" :max="hariIni" min="1900-01-01" class="inp"></div>
+    <div><label for="loginInstansi" class="lbl">Tujuan Instansi</label><input id="loginInstansi" type="text" x-model="loginForm.instansi" placeholder="Contoh: PKN STAN, UI, ITB, Kemenkeu" class="inp"></div>
+   </div>
+   <p x-show="errorLogin" class="rounded-xl bg-rose-50 px-4 py-2.5 text-sm text-rose-600 ring-1 ring-rose-100" x-text="errorLogin"></p>
+   <button type="submit" class="btn w-full" x-text="akunAda?'Masuk':'Buat Akun & Masuk'"></button>
+  </form>
+  <div x-show="daftarAkun.length" class="mt-5">
+   <p class="ttl mb-2 text-center">Akun tersimpan di perangkat ini</p>
+   <div class="space-y-2">
+    <template x-for="a in daftarAkun" :key="a.key">
+     <button type="button" @click="bukaAkun(a.key)" class="flex w-full items-center gap-3 rounded-xl bg-white px-4 py-2.5 text-left shadow-sm ring-1 ring-slate-100 transition hover:ring-indigo-200">
+      <span class="h-9 w-9 shrink-0 overflow-hidden rounded-full bg-indigo-50"><img x-show="a.foto" :src="a.foto" alt="" class="h-full w-full object-cover"><span x-show="!a.foto" class="flex h-full w-full items-center justify-center text-sm font-bold text-indigo-600" x-text="a.nama.charAt(0).toUpperCase()"></span></span>
+      <span class="min-w-0"><span class="block truncate text-sm font-medium text-slate-800" x-text="a.nama"></span><span class="block truncate text-xs text-slate-400" x-text="a.kontak"></span></span>
+     </button>
+    </template>
+   </div>
+  </div>
+  <p class="mt-5 text-center text-xs text-slate-400">Data tersimpan di browser ini (localStorage) dan tetap ada setelah Logout. Tanpa password: siapa pun yang memakai browser ini bisa membuka akun dengan email/no. HP yang sama.</p>
+ </div>
+</section>
+
+<!-- ===== DASHBOARD ===== -->
+<main x-show="profil" class="mx-auto max-w-6xl space-y-6 px-4 py-8 sm:py-10">
+ <header class="rounded-2xl bg-white p-5 shadow-sm ring-1 ring-slate-100 sm:p-6">
+  <div class="flex items-center justify-between gap-3">
+   <div class="flex items-center gap-3">
+    <svg class="h-10 w-10 shrink-0 drop-shadow-sm" viewBox="0 0 48 48" role="img" aria-label="Logo"><use href="#ttf-logo"/></svg>
+    <span class="text-xl font-bold tracking-tight text-slate-900">Track<span class="font-medium text-slate-400">The</span><span class="text-indigo-600">Future</span></span>
+   </div>
+   <div class="flex shrink-0 gap-2">
+    <button type="button" @click="bukaEditProfil()" class="btn2">Edit Profil</button>
+    <button type="button" @click="keluar()" class="rounded-xl px-4 py-2 text-sm font-medium text-rose-500 transition hover:bg-rose-50">Logout</button>
+   </div>
+  </div>
+  <div class="mt-4 flex min-w-0 items-center gap-4 border-t border-slate-100 pt-4">
+   <div class="h-14 w-14 shrink-0 overflow-hidden rounded-full bg-indigo-50 ring-2 ring-indigo-100">
+    <img x-show="p.foto" :src="p.foto" alt="Foto profil" class="h-full w-full object-cover">
+    <div x-show="!p.foto" class="flex h-full w-full items-center justify-center text-xl font-bold text-indigo-600" x-text="inisial"></div>
+   </div>
+   <div class="min-w-0">
+    <h1 class="truncate text-base font-semibold tracking-tight text-slate-900" x-text="p.nama"></h1>
+    <p class="mt-0.5 text-sm text-slate-500"><span x-text="umur+' tahun'"></span> <span class="text-slate-300">·</span> <span x-text="lahirFormat"></span></p>
+    <p class="mt-1.5 inline-flex max-w-full items-center rounded-full bg-indigo-50 px-2.5 py-0.5 text-xs font-medium text-indigo-600 ring-1 ring-indigo-100"><span class="truncate" x-text="'Tujuan: '+p.instansi"></span></p>
+    <p class="ml-1 mt-1.5 inline-flex max-w-full items-center rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-medium text-slate-600 ring-1 ring-slate-200"><span class="truncate" x-text="metodeLabel+' · '+p.kontak"></span></p>
+   </div>
+  </div>
+ </header>
+
+ <div class="grid grid-cols-1 gap-6 lg:grid-cols-12">
+ <!-- KIRI -->
+ <div class="space-y-6 lg:col-span-5">
+  <div class="grid grid-cols-3 gap-2 rounded-2xl bg-white p-1.5 shadow-sm ring-1 ring-slate-100">
+   <template x-for="k in KEY_KATEGORI" :key="k">
+    <button type="button" @click="kategori=k" class="rounded-xl px-2 py-2.5 text-center transition duration-300" :class="kategori===k?'bg-indigo-600 text-white shadow-sm':'text-slate-500 hover:bg-slate-50 hover:text-slate-800'">
+     <span class="block text-sm font-semibold" x-text="LABEL[k]"></span>
+     <span class="block text-[11px]" :class="kategori===k?'text-indigo-100':'text-slate-400'" x-text="DESKRIPSI[k]"></span>
+    </button>
+   </template>
+  </div>
+
+  <!-- Switcher Input / Buku Catatan (UTBK & SKD) -->
+  <div x-show="kategori!=='JASMANI'" class="grid grid-cols-2 gap-1 rounded-xl bg-slate-100 p-1">
+   <template x-for="m in ['input','catatan']" :key="m">
+    <button type="button" @click="mode[kt]=m" class="rounded-lg px-3 py-2 text-sm font-semibold transition duration-300" :class="mode[kt]===m?'bg-white text-indigo-600 shadow-sm':'text-slate-500 hover:text-slate-800'" x-text="(m==='input'?'Input Tryout ':'Buku Catatan ')+kt"></button>
+   </template>
+  </div>
+
+  <!-- ===== BUKU CATATAN SKD ===== -->
+  <section x-show="modeCatatan" class="card !p-5">
+   <div class="mb-3 flex items-center justify-between gap-2">
+    <h2 class="text-base font-semibold text-slate-900" x-text="'Buku Catatan '+kt"></h2>
+    <button type="button" @click="catatanBaru()" class="rounded-lg bg-indigo-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-indigo-700">+ Catatan Baru</button>
+   </div>
+   <div class="mb-3 flex flex-wrap gap-1.5">
+    <template x-for="l in ['Semua',...labelCatatan]" :key="l">
+     <button type="button" @click="filterCatatan=l" class="chip" :class="filterCatatan===l?'bg-slate-900 text-white ring-slate-900':'bg-white text-slate-500 ring-slate-200 hover:text-slate-800'" x-text="l"></button>
+    </template>
+   </div>
+   <div class="mb-4 max-h-36 space-y-1.5 overflow-y-auto pr-1">
+    <p x-show="daftarCatatan.length===0" class="rounded-xl border border-dashed border-slate-200 px-4 py-4 text-center text-xs text-slate-400">Belum ada catatan. Klik “+ Catatan Baru”.</p>
+    <template x-for="c in daftarCatatan" :key="c.id">
+     <div class="flex items-center gap-2 rounded-xl px-3 py-2 ring-1 transition" :class="c.id===catatanId?'bg-indigo-50 ring-indigo-200':'bg-white ring-slate-100 hover:bg-slate-50'">
+      <button type="button" @click="bukaCatatan(c.id)" class="min-w-0 flex-1 text-left">
+       <p class="truncate text-sm font-medium text-slate-800" x-text="c.judul||'Tanpa judul'"></p>
+       <p class="text-[11px] text-slate-400"><span x-text="c.label"></span> · <span x-text="tanggal(c.updated)"></span></p>
+      </button>
+      <template x-if="konfirmHapus!==c.id"><button type="button" @click="konfirmHapus=c.id" aria-label="Hapus catatan" class="flex h-7 w-7 items-center justify-center rounded-lg text-slate-300 hover:bg-rose-50 hover:text-rose-500">✕</button></template>
+      <template x-if="konfirmHapus===c.id"><div class="flex shrink-0 gap-1"><button type="button" @click="hapusCatatan(c.id)" class="rounded-lg bg-rose-600 px-2 py-1 text-xs font-semibold text-white">Hapus</button><button type="button" @click="konfirmHapus=null" class="rounded-lg px-2 py-1 text-xs text-slate-500 hover:bg-slate-100">Batal</button></div></template>
+     </div>
+    </template>
+   </div>
+
+   <div x-show="catatanId" class="rounded-2xl border border-slate-200 bg-white">
+    <div class="space-y-2 border-b border-slate-100 p-3">
+     <input type="text" x-model="catatan.judul" @input="tandaiUbah()" placeholder="Judul catatan" class="w-full text-lg font-semibold text-slate-900 placeholder-slate-300 outline-none">
+     <div class="flex flex-wrap gap-1.5">
+      <template x-for="l in labelCatatan" :key="l">
+       <button type="button" @click="catatan.label=l;tandaiUbah()" class="chip !px-3 !py-1" :class="catatan.label===l?'bg-indigo-600 text-white ring-indigo-600':'bg-white text-slate-500 ring-slate-200'" x-text="l"></button>
+      </template>
+     </div>
+    </div>
+    <!-- Toolbar -->
+    <div class="flex flex-wrap items-center gap-1 border-b border-slate-100 bg-slate-50/70 p-2" @mousedown.prevent>
+     <select class="sel" @mousedown.stop @change="fmt('fontName',$event.target.value)" aria-label="Jenis font">
+      <option value="Inter, sans-serif">Sans-Serif</option><option value="Georgia, 'Times New Roman', serif">Serif</option><option value="ui-monospace, Menlo, Consolas, monospace">Monospace</option>
+     </select>
+     <select class="sel" @mousedown.stop @change="fmt('fontSize',$event.target.value)" aria-label="Ukuran teks">
+      <option value="2">Kecil</option><option value="3" selected>Normal</option><option value="5">Sedang</option><option value="6">Besar</option>
+     </select>
+     <span class="mx-0.5 h-5 w-px bg-slate-200"></span>
+     <button type="button" class="tb font-bold" @click="fmt('bold')" title="Bold">B</button>
+     <button type="button" class="tb italic" @click="fmt('italic')" title="Italic">I</button>
+     <button type="button" class="tb underline" @click="fmt('underline')" title="Underline">U</button>
+     <button type="button" class="tb line-through" @click="fmt('strikeThrough')" title="Coret">S</button>
+     <span class="mx-0.5 h-5 w-px bg-slate-200"></span>
+     <template x-for="w in WARNA_TEKS" :key="w">
+      <button type="button" class="h-5 w-5 rounded-full ring-2 ring-white outline outline-1 outline-slate-200" :style="'background:'+w" @click="fmt('foreColor',w)" title="Warna teks"></button>
+     </template>
+     <span class="mx-0.5 h-5 w-px bg-slate-200"></span>
+     <template x-for="w in WARNA_STABILO" :key="w">
+      <button type="button" class="tb !min-w-0 !px-1.5 text-xs" @click="fmt('hiliteColor',w)" title="Stabilo"><span class="rounded px-1.5" :style="'background:'+w">ab</span></button>
+     </template>
+     <button type="button" class="tb text-xs" @click="fmt('hiliteColor','transparent')" title="Hapus stabilo">⌫ab</button>
+     <span class="mx-0.5 h-5 w-px bg-slate-200"></span>
+     <button type="button" class="tb" @click="fmt('justifyLeft')" title="Rata kiri">⇤</button>
+     <button type="button" class="tb" @click="fmt('justifyCenter')" title="Rata tengah">↔</button>
+     <button type="button" class="tb" @click="fmt('justifyRight')" title="Rata kanan">⇥</button>
+     <button type="button" class="tb" @click="fmt('justifyFull')" title="Rata kiri-kanan">☰</button>
+     <span class="mx-0.5 h-5 w-px bg-slate-200"></span>
+     <button type="button" class="tb" @click="fmt('insertUnorderedList')" title="Bullet list">• List</button>
+     <button type="button" class="tb" @click="fmt('insertOrderedList')" title="Numbered list">1. List</button>
+     <button type="button" class="tb text-rose-500" @click="reset()" title="Reset format">Reset</button>
+    </div>
+    <div x-ref="ed" contenteditable="true" class="ed p-4 text-[15px] text-slate-800" data-ph="Mulai menulis catatanmu di sini…" @input="tandaiUbah()"></div>
+    <div class="flex items-center justify-between gap-3 border-t border-slate-100 px-3 py-2.5">
+     <p class="text-xs" :class="catatanStatus==='Tersimpan'?'text-emerald-600':'text-slate-400'" x-text="catatanStatus==='Tersimpan'?'✓ Tersimpan otomatis':catatanStatus"></p>
+     <button type="button" @click="simpanCatatan(true)" class="rounded-lg bg-indigo-600 px-4 py-1.5 text-xs font-semibold text-white hover:bg-indigo-700">Simpan Catatan</button>
+    </div>
+   </div>
+   <p x-show="!catatanId && daftarCatatan.length>0" class="text-center text-xs text-slate-400">Pilih catatan di atas atau buat catatan baru.</p>
+  </section>
+
+  <!-- ===== FORM TRYOUT / JASMANI ===== -->
+  <section x-show="!modeCatatan" class="card">
+   <h2 class="mb-5 text-base font-semibold text-slate-900" x-text="kategori==='JASMANI'?'Input Nilai Jasmani':'Input Tryout '+kt"></h2>
+
+   <div x-show="kategori!=='JASMANI'">
+    <div><label for="namaTryout" class="lbl">Nama Tryout</label><input id="namaTryout" type="text" x-model="f.nama" placeholder="Contoh: Tryout #3" class="inp"></div>
+    <div class="mt-6 space-y-6">
+     <template x-for="g in KATEGORI[kt].grup" :key="kt+g.nama">
+      <div>
+       <div class="mb-2.5 flex items-center justify-between gap-2">
+        <p class="ttl" x-text="g.nama"></p>
+        <p class="text-xs text-slate-400" x-show="kt==='UTBK'">Rata-rata <span class="font-semibold tabular-nums text-slate-600" x-text="rataGrup(g)"></span></p>
+        <p class="text-xs text-slate-400" x-show="kt==='SKD'">🔒 Terkunci</p>
+       </div>
+       <div class="space-y-2.5">
+        <template x-for="s in g.subtes" :key="s.kode">
+         <div>
+          <div class="flex items-center gap-3">
+           <div class="row"><p class="text-sm font-medium leading-snug text-slate-700" x-text="s.nama"></p>
+            <p class="text-xs text-slate-400" x-show="s.pg!==undefined">Passing grade <span class="font-semibold text-slate-500" x-text="s.pg"></span></p></div>
+           <input type="number" inputmode="decimal" min="0" x-model="f.nilai[s.kode]" placeholder="Nilai" class="inp !w-20 !px-3 text-center">
+          </div>
+          <p class="mt-1 pr-1 text-right text-xs" x-show="s.pg!==undefined&&terisi(s.kode)" :class="lulusSubtes(s)?'text-emerald-600':'text-rose-500'" x-text="lulusSubtes(s)?'Memenuhi passing grade':'Di bawah passing grade'"></p>
+         </div>
+        </template>
+       </div>
+      </div>
+     </template>
+    </div>
+    <div class="box mt-6 flex items-center justify-between gap-3">
+     <div><p class="text-sm font-medium text-slate-700" x-text="kt==='UTBK'?'Nilai Akhir':'Nilai Total'"></p>
+      <p class="text-xs text-slate-400" x-text="kt==='UTBK'?'Rata-rata dari '+jumlahTerisi+' subtes yang terisi':'Jumlah otomatis dari semua subtes'"></p></div>
+     <p class="text-3xl font-bold tabular-nums text-slate-900" x-text="fmt(total)"></p>
+    </div>
+    <div class="mt-6 grid grid-cols-1 gap-4" :class="kt==='UTBK'?'sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2':''">
+     <div><label for="targetTryout" class="lbl" x-text="kt==='UTBK'?'Target Nilai Akhir':'Target Nilai (Total)'"></label>
+      <input id="targetTryout" type="number" inputmode="decimal" min="0" x-model="f.target" :placeholder="kt==='SKD'?'Contoh: 400':'Contoh: 650'" class="inp"></div>
+     <div x-show="kt==='UTBK'"><label for="passingTryout" class="lbl">Passing Grade</label>
+      <input id="passingTryout" type="number" inputmode="decimal" min="0" x-model="f.passing" placeholder="Contoh: 550" class="inp"></div>
+    </div>
+   </div>
+
+   <div x-show="kategori==='JASMANI'">
+    <div><label for="namaJasmani" class="lbl">Nama Sesi <span class="font-normal text-slate-400">(opsional)</span></label>
+     <input id="namaJasmani" type="text" x-model="jasmaniForm.nama" placeholder="Contoh: Latihan Minggu 1" class="inp"></div>
+    <div class="mt-6"><label class="lbl">Jenis Kelamin</label>
+     <div class="grid grid-cols-2 gap-1 rounded-xl bg-slate-50 p-1 ring-1 ring-slate-100">
+      <template x-for="g in ['PRIA','WANITA']" :key="g">
+       <button type="button" @click="jasmaniForm.gender=g;error=''" class="rounded-lg px-3 py-2 text-sm font-semibold transition" :class="jasmaniForm.gender===g?'bg-white text-indigo-600 shadow-sm ring-1 ring-slate-100':'text-slate-500 hover:text-slate-800'" x-text="g==='PRIA'?'Pria':'Wanita'"></button>
+      </template>
+     </div></div>
+    <div class="mt-6">
+     <div class="mb-2.5 flex items-center justify-between"><p class="ttl">Subtes Jasmani</p><p class="text-xs text-slate-400">🔒 Terkunci</p></div>
+     <div class="space-y-3">
+      <template x-for="s in daftarJasmani" :key="jasmaniForm.gender+s.kode">
+       <div>
+        <div class="flex items-center gap-2.5">
+         <div class="row"><p class="text-sm font-medium leading-snug text-slate-700" x-text="s.nama"></p><p class="text-xs text-slate-400" x-text="s.satuan"></p></div>
+         <input type="text" inputmode="decimal" autocomplete="off" x-model="capaianAktif[s.kode]" :placeholder="s.placeholder" class="inp !w-24 !px-3 text-center">
+         <div class="w-14 shrink-0 rounded-xl bg-indigo-50/60 py-1.5 text-center ring-1 ring-indigo-100">
+          <p class="text-[10px] font-medium uppercase tracking-wide text-indigo-400">Nilai</p>
+          <p class="text-base font-bold tabular-nums leading-tight text-indigo-600" x-text="skorText(s)"></p></div>
+        </div>
+        <p class="mt-1 pr-1 text-right text-xs text-rose-500" x-show="tidakValid(s)" x-text="s.jenis==='waktu'?'Isi waktu lebih dari 0 (boleh koma, mis. 16,2)':'Isi dengan angka yang valid'"></p>
+       </div>
+      </template>
+     </div>
+    </div>
+    <div class="box mt-6 grid grid-cols-2 gap-4">
+     <div><p class="text-sm font-medium text-slate-700">Akumulasi Poin</p><p class="text-xs text-slate-400" x-text="'dari maks. '+(daftarJasmani.length*100)"></p><p class="mt-1 text-3xl font-bold tabular-nums text-slate-900" x-text="fmt(akumulasiJ)"></p></div>
+     <div class="border-l border-slate-200 pl-4"><p class="text-sm font-medium text-slate-700">Rata-rata Nilai</p><p class="text-xs text-slate-400" x-text="jumlahTerisiJ+'/'+daftarJasmani.length+' subtes terisi'"></p><p class="mt-1 text-3xl font-bold tabular-nums text-indigo-600" x-text="rataJ===null?'–':fmt(rataJ)"></p></div>
+    </div>
+    <div class="mt-6"><label for="targetJasmani" class="lbl">Target Nilai Jasmani <span class="font-normal text-slate-400">(rata-rata, 0–100)</span></label>
+     <input id="targetJasmani" type="number" inputmode="decimal" min="0" max="100" step="any" x-model="jasmaniForm.target" placeholder="Contoh: 75" class="inp"></div>
+   </div>
+
+   <div class="mt-6"><label for="evaluasi" class="lbl">Evaluasi Tryout / Latihan <span class="font-normal text-slate-400">(opsional)</span></label>
+    <textarea id="evaluasi" rows="3" x-model="formAktif.evaluasi" placeholder="Catat kendala waktu, soal yang sering salah, atau strategi perbaikan berikutnya…" class="inp resize-y"></textarea></div>
+
+   <div class="mt-6" x-show="!evaluasiAktif"><div class="rounded-xl border border-dashed border-slate-200 bg-slate-50/60 px-4 py-5 text-center text-sm text-slate-400" x-text="petunjukAktif"></div></div>
+   <div class="mt-6" x-show="evaluasiAktif">
+    <template x-for="s in (evaluasiAktif?[evaluasiAktif]:[])" :key="s.kode">
+     <div class="fade-in-up rounded-xl bg-slate-50 px-4 py-4 text-center ring-1 ring-slate-100">
+      <p class="mb-2 text-xs font-medium uppercase tracking-wider text-slate-400">Pratinjau Hasil</p>
+      <span class="badge-pulse inline-flex items-center gap-2.5 rounded-full px-5 py-2 text-sm font-bold tracking-wide ring-1" :class="s.tema.badge" :style="'--ring:'+s.tema.ringSoft">
+       <span class="relative flex h-2.5 w-2.5"><span class="absolute inline-flex h-full w-full animate-ping rounded-full opacity-60" :class="s.tema.dot"></span><span class="relative inline-flex h-2.5 w-2.5 rounded-full" :class="s.tema.dot"></span></span>
+       <span x-text="s.label"></span></span>
+      <p class="mt-3 text-sm text-slate-600" x-text="s.pesan"></p>
+     </div>
+    </template>
+   </div>
+
+   <p x-show="error" class="mt-4 rounded-xl bg-rose-50 px-4 py-2.5 text-sm text-rose-600 ring-1 ring-rose-100" x-text="error"></p>
+   <button type="button" @click="simpan()" class="btn mt-6 w-full">Simpan Hasil</button>
+  </section>
+ </div>
+
+ <!-- KANAN -->
+ <div class="space-y-6 lg:col-span-7">
+  <section class="card">
+   <div class="mb-5 flex items-center justify-between">
+    <h2 class="text-base font-semibold text-slate-900">Grafik Perkembangan <span class="text-indigo-600" x-text="LABEL[kategori]"></span></h2>
+    <span class="inline-flex items-center gap-1.5 text-xs text-slate-400"><span class="relative flex h-2 w-2"><span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-60"></span><span class="relative inline-flex h-2 w-2 rounded-full bg-emerald-500"></span></span>Live</span>
+   </div>
+   <div class="mb-5 grid grid-cols-3 divide-x divide-slate-100 rounded-xl bg-slate-50 py-3 text-center ring-1 ring-slate-100">
+    <div><p class="text-xs text-slate-400" x-text="kategori==='JASMANI'?'Jumlah Sesi':'Jumlah Tryout'"></p><p class="mt-0.5 text-lg font-semibold tabular-nums" x-text="dataKategori.length"></p></div>
+    <div><p class="text-xs text-slate-400">Rata-rata</p><p class="mt-0.5 text-lg font-semibold tabular-nums" x-text="statsKategori.avg"></p></div>
+    <div><p class="text-xs text-slate-400">Tertinggi</p><p class="mt-0.5 text-lg font-semibold tabular-nums" x-text="statsKategori.max"></p></div>
+   </div>
+   <div class="relative h-72 w-full">
+    <canvas id="chartUtama"></canvas>
+    <div x-show="dataKategori.length===0" class="absolute inset-0 flex items-center justify-center rounded-xl border border-dashed border-slate-200 bg-white/90 px-6 text-center text-sm text-slate-400">Grafik akan muncul setelah kamu menyimpan data <span class="mx-1 font-medium" x-text="LABEL[kategori]"></span> pertama.</div>
+   </div>
+  </section>
+
+  <section>
+   <div class="mb-4 flex flex-wrap items-center justify-between gap-3 px-1">
+    <h2 class="text-base font-semibold text-slate-900">Riwayat</h2>
+    <button type="button" x-show="riwayatTampil.length>0" @click="konfirmasi=true" class="rounded-lg px-3 py-1.5 text-xs font-medium text-rose-500 hover:bg-rose-50">Hapus Semua</button>
+   </div>
+   <div class="mb-4 flex flex-wrap gap-2">
+    <template x-for="k in ['SEMUA',...KEY_KATEGORI]" :key="k">
+     <button type="button" @click="filterRiwayat=k" class="chip" :class="filterRiwayat===k?'bg-slate-900 text-white ring-slate-900':'bg-white text-slate-500 ring-slate-200 hover:text-slate-800'" x-text="k==='SEMUA'?'Semua':LABEL[k]"></button>
+    </template>
+   </div>
+   <div x-show="riwayatTampil.length===0" class="rounded-2xl border border-dashed border-slate-200 bg-white/60 px-6 py-10 text-center text-sm text-slate-400">Belum ada riwayat<span x-show="filterRiwayat!=='SEMUA'"> <span x-text="LABEL[filterRiwayat]"></span></span>.</div>
+   <div class="space-y-4">
+    <template x-for="h in riwayatTampil" :key="h.id">
+     <article class="fade-in-up rounded-2xl bg-white p-5 shadow-sm ring-1 ring-slate-100 transition hover:shadow-md sm:p-6">
+      <div class="flex items-start justify-between gap-3">
+       <div class="min-w-0">
+        <div class="flex items-center gap-2">
+         <h3 class="truncate text-base font-semibold text-slate-900" x-text="h.nama"></h3>
+         <span class="shrink-0 rounded-md bg-slate-100 px-1.5 py-0.5 text-[10px] font-bold text-slate-500" x-text="LABEL[h.kategori]"></span>
+         <span x-show="h.gender" class="shrink-0 rounded-md bg-indigo-50 px-1.5 py-0.5 text-[10px] font-bold text-indigo-500" x-text="h.gender==='PRIA'?'Pria':'Wanita'"></span>
+         <span x-show="h.kategori==='JASMANI'&&!h.gender" class="shrink-0 rounded-md bg-amber-50 px-1.5 py-0.5 text-[10px] font-bold text-amber-600">Format lama</span>
+        </div>
+        <p class="mt-0.5 text-xs text-slate-400" x-text="tanggal(h.tanggal)"></p>
+       </div>
+       <div class="flex shrink-0 items-center gap-2">
+        <span class="inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-bold ring-1" :class="statusEntri(h).tema.badge"><span class="h-2 w-2 rounded-full" :class="statusEntri(h).tema.dot"></span><span x-text="statusEntri(h).label"></span></span>
+        <button type="button" @click="hapusEntri(h)" aria-label="Hapus riwayat" class="flex h-8 w-8 items-center justify-center rounded-lg text-slate-300 hover:bg-rose-50 hover:text-rose-500">✕</button>
+       </div>
+      </div>
+      <div class="mt-4 flex flex-wrap gap-1.5">
+       <template x-for="(r,i) in rincian(h)" :key="i">
+        <span class="inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1 text-xs ring-1" :class="r.gagal?'bg-rose-50 text-rose-600 ring-rose-100':'bg-slate-50 text-slate-600 ring-slate-100'">
+         <span x-text="r.label"></span><span x-show="r.ket" class="text-slate-400" x-text="'· '+r.ket+' →'"></span><span class="font-semibold tabular-nums" x-text="fmt(r.nilai)"></span></span>
+       </template>
+      </div>
+      <dl class="mt-4 grid divide-x divide-slate-100 rounded-xl bg-slate-50 py-2.5 text-center ring-1 ring-slate-100" :class="statCells(h).length===4?'grid-cols-4':'grid-cols-3'">
+       <template x-for="c in statCells(h)" :key="c.l"><div><dt class="text-xs text-slate-400" x-text="c.l"></dt><dd class="font-semibold tabular-nums" :class="c.c||'text-slate-900'" x-text="c.v"></dd></div></template>
+      </dl>
+      <template x-if="h.evaluasi"><div class="mt-4 rounded-xl bg-indigo-50/60 px-4 py-3 ring-1 ring-indigo-100"><p class="text-xs font-semibold uppercase tracking-wider text-indigo-400">Evaluasi</p><p class="mt-1 whitespace-pre-wrap break-words text-sm text-slate-700" x-text="h.evaluasi"></p></div></template>
+     </article>
+    </template>
+   </div>
+  </section>
+ </div>
+ </div>
+ <footer class="pb-4 pt-2 text-center text-xs text-slate-400">TrackTheFuture · Data tersimpan di browser kamu (localStorage)</footer>
+</main>
+
+<!-- MODAL EDIT PROFIL -->
+<div x-show="modalProfil" class="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-slate-900/40 px-4 py-6" @click.self="modalProfil=false" @keydown.escape.window="modalProfil=false">
+ <form @submit.prevent="simpanProfil()" novalidate class="fade-in-up w-full max-w-md space-y-5 rounded-2xl bg-white p-6 shadow-xl sm:p-8">
+  <div><h3 class="text-base font-semibold text-slate-900">Edit Profil</h3><p class="mt-0.5 text-xs text-slate-400" x-text="'Akun '+metodeLabel+' · '+p.kontak"></p></div>
+  <div class="flex items-center gap-4">
+   <div class="h-20 w-20 shrink-0 overflow-hidden rounded-full bg-indigo-50 ring-2 ring-indigo-100">
+    <img x-show="editForm.foto" :src="editForm.foto" alt="Foto profil" class="h-full w-full object-cover">
+    <div x-show="!editForm.foto" class="flex h-full w-full items-center justify-center text-2xl font-bold text-indigo-600" x-text="(editForm.nama.trim().charAt(0)||'?').toUpperCase()"></div>
+   </div>
+   <div class="min-w-0"><label class="lbl">Foto Profil</label>
+    <input type="file" accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp" @change="pilihFoto($event,editForm)" class="block w-full text-xs text-slate-500 file:mr-3 file:rounded-lg file:border-0 file:bg-indigo-50 file:px-3 file:py-1.5 file:text-xs file:font-semibold file:text-indigo-600 hover:file:bg-indigo-100">
+    <button type="button" x-show="editForm.foto" @click="editForm.foto=''" class="mt-1 text-xs text-rose-500">Hapus foto</button></div>
+  </div>
+  <div><label for="editNama" class="lbl">Nama Lengkap</label><input id="editNama" type="text" x-model="editForm.nama" class="inp"></div>
+  <div><label for="editLahir" class="lbl">Tanggal Lahir</label><input id="editLahir" type="date" x-model="editForm.lahir" :max="hariIni" min="1900-01-01" class="inp"></div>
+  <div><label for="editInstansi" class="lbl">Tujuan Instansi</label><input id="editInstansi" type="text" x-model="editForm.instansi" class="inp"></div>
+  <p x-show="errorProfil" class="rounded-xl bg-rose-50 px-4 py-2.5 text-sm text-rose-600 ring-1 ring-rose-100" x-text="errorProfil"></p>
+  <div class="grid grid-cols-2 gap-3"><button type="button" @click="modalProfil=false" class="btn2">Batal</button><button type="submit" class="btn !py-2.5">Simpan</button></div>
+ </form>
+</div>
+
+<!-- MODAL HAPUS SEMUA -->
+<div x-show="konfirmasi" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 px-4" @click.self="konfirmasi=false" @keydown.escape.window="konfirmasi=false">
+ <div class="fade-in-up w-full max-w-sm rounded-2xl bg-white p-6 shadow-xl">
+  <h3 class="text-center text-base font-semibold text-slate-900">Hapus <span x-text="labelHapusSemua"></span>?</h3>
+  <p class="mt-1.5 text-center text-sm text-slate-500">Data beserta grafiknya akan dihapus permanen dan tidak bisa dikembalikan.</p>
+  <div class="mt-6 grid grid-cols-2 gap-3"><button type="button" @click="konfirmasi=false" class="btn2">Batal</button>
+   <button type="button" @click="hapusSemua()" class="rounded-xl bg-rose-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-rose-700">Ya, Hapus</button></div>
+ </div>
+</div>
+
+<div x-show="toast" class="fixed bottom-6 left-1/2 z-50 -translate-x-1/2 rounded-full bg-slate-900 px-5 py-2.5 text-sm font-medium text-white shadow-lg" x-text="toast"></div>
+</div>
+
+<script>
+const STORAGE_KEY='tryout-score-tracker:v2', PROFIL_KEY='tryout-score-tracker:profil',
+      FOTO_KEY='tryout-score-tracker:foto', NOTES_KEY='tryout-score-tracker:catatan-skd'; // kunci lama (hanya untuk migrasi)
+const ACC_PREFIX='ttf:akun:', ACTIVE_KEY='ttf:activeSession';
+const KEY_KATEGORI=['UTBK','SKD','JASMANI'];
+const LABEL={UTBK:'UTBK',SKD:'SKD',JASMANI:'Jasmani'};
+const DESKRIPSI={UTBK:'TPS + Literasi',SKD:'TWK · TIU · TKP',JASMANI:'Latihan fisik'};
+const LABEL_CATATAN={
+ UTBK:['Umum','Penalaran Umum','PPU','PBM','Pengetahuan Kuantitatif','Literasi B. Indonesia (Saintek)','Literasi B. Indonesia (Soshum)','Literasi B. Inggris','Penalaran Matematika'],
+ SKD:['Umum','TWK','TIU','TKP']};
+const WARNA_TEKS=['#0f172a','#4338ca','#dc2626','#059669','#d97706'];
+const WARNA_STABILO=['#fef08a','#bbf7d0','#bae6fd'];
+
+/* storage aman */
+const lsGet=k=>{try{return localStorage.getItem(k)}catch(e){return null}};
+const lsSet=(k,v)=>{try{localStorage.setItem(k,v);return true}catch(e){return false}};
+const lsDel=k=>{try{localStorage.removeItem(k)}catch(e){}};
+
+/* ===== akun: metode login & ID akun unik ===== */
+const METODE=[
+ {id:'google',label:'Google',field:'Email Akun Google',ph:'nama@gmail.com',type:'email'},
+ {id:'email',label:'Email',field:'Alamat Email',ph:'nama@email.com',type:'email'},
+ {id:'hp',label:'No. HP',field:'Nomor HP Aktif',ph:'08xxxxxxxxxx',type:'tel'}];
+const EMAIL_RE=/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+const normHP=t=>{let d=String(t||'').replace(/\D/g,'');if(d.startsWith('0'))d='62'+d.slice(1);else if(d.startsWith('8'))d='62'+d;return d};
+function validasiKontak(m,k){
+ const t=String(k||'').trim();
+ if(!t)return m==='hp'?'Nomor HP wajib diisi.':'Email wajib diisi.';
+ if(m==='hp')return /^62\d{8,13}$/.test(normHP(t))?'':'Nomor HP tidak valid (contoh: 08123456789).';
+ return EMAIL_RE.test(t)?'':'Format email tidak valid.'}
+// accountKey: email (Google/Email) atau nomor HP ternormalisasi; '' bila tidak valid
+function kunciAkun(m,k){return validasiKontak(m,k)?'':(m==='hp'?'hp:'+normHP(k):'mail:'+String(k).trim().toLowerCase())}
+
+const SKD_SUBTES=[
+ {kode:'twk',nama:'Tes Wawasan Kebangsaan (TWK)',singkat:'TWK',pg:65},
+ {kode:'tiu',nama:'Tes Intelegensi Umum (TIU)',singkat:'TIU',pg:80},
+ {kode:'tkp',nama:'Tes Karakteristik Pribadi (TKP)',singkat:'TKP',pg:166}];
+const SKD_PASSING_TOTAL=SKD_SUBTES.reduce((a,s)=>a+s.pg,0);
+const KATEGORI={
+ UTBK:{grup:[
+  {nama:'TPS (Tes Potensi Skolastik)',subtes:[{kode:'pu',nama:'Penalaran Umum'},{kode:'ppu',nama:'Pengetahuan & Pemahaman Umum'},{kode:'pbm',nama:'Pemahaman Bacaan & Menulis'},{kode:'pk',nama:'Pengetahuan Kuantitatif'}]},
+  {nama:'Tes Literasi',subtes:[{kode:'lbi_saintek',nama:'Literasi Bahasa Indonesia (Saintek)'},{kode:'lbi_soshum',nama:'Literasi Bahasa Indonesia (Soshum)'},{kode:'lbing',nama:'Literasi Bahasa Inggris'},{kode:'pm',nama:'Penalaran Matematika'}]}]},
+ SKD:{grup:[{nama:'Subtes SKD',subtes:SKD_SUBTES}]}};
+
+const JASMANI={
+ PRIA:[
+  {kode:'lari',nama:'Lari 12 Menit',satuan:'Jarak (meter)',unit:'m',jenis:'jarak',placeholder:'Contoh: 2800',tabel:[[100,3444],[95,3338],[88,3190],[83,3084],[78,2978],[73,2872],[68,2767],[63,2661],[58,2555],[53,2449],[48,2343],[43,2237],[38,2132],[33,2026],[28,1920],[23,1814],[18,1708],[13,1603],[8,1497],[3,1392],[1,1349]]},
+  {kode:'pullup',nama:'Pull Up',satuan:'Repetisi (kali)',unit:'x',jenis:'repetisi',placeholder:'Contoh: 10',tabel:[[100,17],[94,16],[88,15],[82,14],[76,13],[70,12],[64,11],[58,10],[52,9],[46,8],[39,7],[32,6],[26,5],[20,4],[14,3],[8,2],[4,1]]},
+  {kode:'situp',nama:'Sit Up',satuan:'Repetisi (kali)',unit:'x',jenis:'repetisi',placeholder:'Contoh: 30',tabel:[[100,40],[88,37],[76,34],[64,31],[52,28],[41,25],[32,22],[26,19],[20,16],[14,13],[8,10],[2,7],[1,6]]},
+  {kode:'pushup',nama:'Push Up',satuan:'Repetisi (kali)',unit:'x',jenis:'repetisi',placeholder:'Contoh: 30',tabel:[[100,43],[91,39],[79,35],[67,31],[55,27],[46,23],[38,19],[29,15],[19,11],[11,7],[5,3],[3,1]]},
+  {kode:'shuttle',nama:'Shuttle Run',satuan:'Waktu (detik)',unit:'dtk',jenis:'waktu',placeholder:'Contoh: 17,5',tabel:[[100,16.2],[95,16.7],[86,17.2],[76,17.7],[66,18.2],[56,18.7],[47,19.2],[38,19.7],[28,20.2],[19,20.7],[10,21.2],[0,21.7]]},
+  {kode:'renang',nama:'Renang',satuan:'Waktu (detik)',unit:'dtk',jenis:'waktu',placeholder:'Contoh: 35',tabel:[[100,14],[95,17.5],[90,21],[85,24.5],[80,28],[75,31.5],[70,35],[65,38.5],[60,42],[55,45.5],[50,49],[45,52.5],[41,55]]}],
+ WANITA:[
+  {kode:'lari',nama:'Lari 12 Menit',satuan:'Jarak (meter)',unit:'m',jenis:'jarak',placeholder:'Contoh: 2500',tabel:[[100,3095],[95,2999],[90,2893],[85,2788],[80,2682],[75,2576],[70,2470],[65,2364],[60,2259],[55,2153],[50,2048],[45,1941],[40,1836],[35,1729],[30,1624],[25,1518],[20,1412],[15,1307],[10,1202],[5,1097],[1,1013]]},
+  {kode:'chinning',nama:'Chinning',satuan:'Repetisi (kali)',unit:'x',jenis:'repetisi',placeholder:'Contoh: 40',tabel:[[100,72],[92,69],[85,66],[77,63],[70,60],[62,57],[55,54],[47,51],[40,48],[32,45],[25,42],[17,39],[10,36],[2,33]]},
+  {kode:'situp',nama:'Sit Up',satuan:'Repetisi (kali)',unit:'x',jenis:'repetisi',placeholder:'Contoh: 30',tabel:[[100,50],[91,47],[82,44],[73,41],[64,38],[55,35],[46,32],[37,29],[26,26],[19,23],[10,20],[1,17]]},
+  {kode:'pushup',nama:'Push Up',satuan:'Repetisi (kali)',unit:'x',jenis:'repetisi',placeholder:'Contoh: 25',tabel:[[100,37],[90,34],[79,31],[69,28],[58,25],[48,22],[37,19],[27,16],[16,13],[6,10],[1,1]]},
+  {kode:'shuttle',nama:'Shuttle Run',satuan:'Waktu (detik)',unit:'dtk',jenis:'waktu',placeholder:'Contoh: 18,5',tabel:[[100,17.6],[91,18.5],[82,19.4],[73,20.3],[64,21.2],[55,22.1],[46,23],[37,23.9],[28,24.8],[19,25.7],[10,26.6],[1,27.5],[0,27.6]]},
+  {kode:'renang',nama:'Renang',satuan:'Waktu (detik)',unit:'dtk',jenis:'waktu',placeholder:'Contoh: 23,4',tabel:[[100,20],[95,23.4],[90,26.7],[85,30.1],[80,33.4],[75,36.8],[70,40.1],[65,43.5],[60,46.8],[55,50.2],[50,53.5],[45,56.9],[41,60]]}]};
+const buatCapaian=g=>Object.fromEntries(JASMANI[g].map(s=>[s.kode,'']));
+function konversiNilai(s,v){let b=0;for(const [n,a] of s.tabel){const ok=s.jenis==='waktu'?v<=a:v>=a;if(ok&&n>b)b=n}return b}
+function parseCapaian(s,raw){
+ const t=String(raw==null?'':raw).trim(); if(!t) return NaN; let v;
+ if(s.jenis!=='waktu'&&/^\d{1,3}([.,]\d{3})+$/.test(t)) v=parseFloat(t.replace(/[.,]/g,''));
+ else if(/^\d+([.,]\d+)?$/.test(t)) v=parseFloat(t.replace(',','.'));
+ else return NaN;
+ return (s.jenis==='waktu'&&v<=0)?NaN:v}
+
+const TEMA={
+ merah:{badge:'bg-rose-50 text-rose-700 ring-rose-200',dot:'bg-rose-500',ringSoft:'rgba(244,63,94,.35)',hex:'#f43f5e'},
+ kuning:{badge:'bg-amber-50 text-amber-700 ring-amber-200',dot:'bg-amber-500',ringSoft:'rgba(245,158,11,.35)',hex:'#f59e0b'},
+ hijau:{badge:'bg-emerald-50 text-emerald-700 ring-emerald-200',dot:'bg-emerald-500',ringSoft:'rgba(16,185,129,.35)',hex:'#10b981'}};
+
+const fmtNum=n=>Number(n).toLocaleString('id-ID',{maximumFractionDigits:2});
+const toNum=v=>(v===''||v==null)?NaN:parseFloat(v);
+const adaAngka=v=>!isNaN(toNum(v));
+const semuaSubtes=k=>KATEGORI[k].grup.flatMap(g=>g.subtes);
+const buatFormTryout=k=>({nama:'',target:'',passing:'',evaluasi:'',nilai:Object.fromEntries(semuaSubtes(k).map(s=>[s.kode,'']))});
+
+const pecahTanggal=iso=>{const m=/^(\d{4})-(\d{2})-(\d{2})$/.exec(iso||'');return m?{y:+m[1],m:+m[2],d:+m[3]}:null};
+function hariIniISO(){const n=new Date();return `${n.getFullYear()}-${String(n.getMonth()+1).padStart(2,'0')}-${String(n.getDate()).padStart(2,'0')}`}
+function hitungUmur(iso){const p=pecahTanggal(iso);if(!p)return 0;const n=new Date();let u=n.getFullYear()-p.y;const b=n.getMonth()+1;if(b<p.m||(b===p.m&&n.getDate()<p.d))u--;return Math.max(u,0)}
+function formatLahir(iso){const p=pecahTanggal(iso);return p?new Date(p.y,p.m-1,p.d).toLocaleDateString('id-ID',{day:'numeric',month:'long',year:'numeric'}):''}
+function validasiProfil(pr){
+ if(!pr.nama.trim())return'Nama lengkap wajib diisi.';
+ if(!pr.lahir)return'Tanggal lahir wajib diisi.';
+ const p=pecahTanggal(pr.lahir);
+ if(!p||p.y<1900)return'Tanggal lahir tidak valid.';
+ if(pr.lahir>hariIniISO())return'Tanggal lahir tidak boleh di masa depan.';
+ if(!pr.instansi.trim())return'Tujuan instansi wajib diisi.';
+ return''}
+
+/* Kompres foto -> JPEG base64 maks 200x200 (crop tengah) */
+function kompresFoto(file){
+ return new Promise((res,rej)=>{
+  if(!/^image\/(jpeg|png|webp)$/.test(file.type)) return rej(new Error('Format harus JPG, PNG, atau WEBP.'));
+  const r=new FileReader();
+  r.onerror=()=>rej(new Error('Gagal membaca file.'));
+  r.onload=()=>{
+   const img=new Image();
+   img.onerror=()=>rej(new Error('Gambar tidak dapat dibuka.'));
+   img.onload=()=>{
+    const S=200,c=document.createElement('canvas');c.width=c.height=S;
+    const x=c.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,S,S);
+    const m=Math.min(img.width,img.height),sx=(img.width-m)/2,sy=(img.height-m)/2;
+    x.drawImage(img,sx,sy,m,m,0,0,S,S);
+    res(c.toDataURL('image/jpeg',.82));
+   };
+   img.src=r.result;
+  };
+  r.readAsDataURL(file);
+ })}
+
+function bandingkanTarget(total,target){
+ if(total>=target)return{kode:'target',label:'Memenuhi Target',tema:TEMA.hijau,pesan:'Luar biasa! Nilaimu sudah mencapai target. Pertahankan!'};
+ const d=target-total;
+ if(d<=10)return{kode:'dekat',label:'Sedikit Lagi!',tema:TEMA.kuning,pesan:`Tinggal ${fmtNum(d)} poin lagi menuju target. Ayo semangat!`};
+ return{kode:'kurang',label:'Kurang dari Target',tema:TEMA.merah,pesan:`Lulus passing grade, tetapi masih kurang ${fmtNum(d)} poin dari target.`}}
+function statusTryout(e){
+ if(e.kategori==='SKD'){
+  const g=e.subtes.filter(s=>s.nilai<s.pg);
+  if(g.length)return{kode:'gagal',label:'GAGAL',tema:TEMA.merah,pesan:`Belum memenuhi passing grade subtes: ${g.map(s=>`${s.singkat} (kurang ${fmtNum(s.pg-s.nilai)})`).join(', ')}.`};
+ }else if(e.total<e.passing)return{kode:'gagal',label:'GAGAL',tema:TEMA.merah,pesan:`Belum mencapai passing grade. Kurang ${fmtNum(e.passing-e.total)} poin lagi.`};
+ return bandingkanTarget(e.total,e.target)}
+function statusJasmani(e){
+ if(e.total>=e.target)return{kode:'target',label:'Memenuhi Target',tema:TEMA.hijau,pesan:'Mantap! Rata-rata nilai jasmanimu sudah memenuhi target.'};
+ return{kode:'kurang',label:'Tidak Memenuhi Target',tema:TEMA.merah,pesan:`Rata-rata nilai jasmanimu masih kurang ${fmtNum(e.target-e.total)} poin dari target.`}}
+
+function tryoutTracker(){
+ const profilKosong=()=>({nama:'',lahir:'',instansi:'',foto:'',metode:'google',kontak:''});
+ let chart=null,toastTimer=null,saveTimer=null;
+ return{
+  KEY_KATEGORI,LABEL,DESKRIPSI,KATEGORI,LABEL_CATATAN,WARNA_TEKS,WARNA_STABILO,
+  profil:null,akunKey:'',daftarAkun:[],METODE,konfirmHapus:null,loginForm:profilKosong(),editForm:profilKosong(),errorLogin:'',errorProfil:'',modalProfil:false,hariIni:hariIniISO(),
+  kategori:'UTBK',filterRiwayat:'UTBK',mode:{UTBK:'input',SKD:'input'},
+  form:{UTBK:buatFormTryout('UTBK'),SKD:buatFormTryout('SKD')},
+  jasmaniForm:{nama:'',gender:'PRIA',target:'',evaluasi:'',capaian:{PRIA:buatCapaian('PRIA'),WANITA:buatCapaian('WANITA')}},
+  data:{tryout:[],jasmani:[]},error:'',toast:'',konfirmasi:false,
+  /* catatan */
+  notes:{UTBK:[],SKD:[]},catatanId:null,catatanKat:'UTBK',catatan:{judul:'',label:'Umum'},filterCatatan:'Semua',catatanStatus:'',
+
+  init(){
+   this.segarkanDaftar();
+   const aktif=lsGet(ACTIVE_KEY);
+   if(aktif&&this.bacaAkun(aktif))this.bukaAkun(aktif,true);
+   this.$nextTick(()=>{this.buatChart();this.updateChart()});
+   this.$watch('kategori',()=>{this.error='';this.filterRiwayat=this.kategori;this.tutupCatatan();this.$nextTick(()=>this.updateChart())});
+   const flush=()=>this.simpanCatatan(false);
+   window.addEventListener('pagehide',flush);
+   document.addEventListener('visibilitychange',()=>{if(document.hidden)flush()});
+  },
+  fmt:fmtNum,statusTryout,statusJasmani,
+  tanggal(iso){return new Date(iso).toLocaleString('id-ID',{day:'numeric',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'})},
+  tampilToast(m){this.toast=m;clearTimeout(toastTimer);toastTimer=setTimeout(()=>this.toast='',2200)},
+
+  /* ===== akun & profil (data per accountKey) ===== */
+  get p(){return this.profil||profilKosong()},
+  get inisial(){return(this.p.nama.trim().charAt(0)||'?').toUpperCase()},
+  get umur(){return hitungUmur(this.p.lahir)},
+  get lahirFormat(){return formatLahir(this.p.lahir)},
+  get metodeAktif(){return METODE.find(m=>m.id===this.loginForm.metode)||METODE[0]},
+  get metodeLabel(){return(METODE.find(m=>m.id===this.p.metode)||METODE[0]).label},
+  get akunAda(){const k=kunciAkun(this.loginForm.metode,this.loginForm.kontak);return k?this.bacaAkun(k):null},
+  bacaAkun(k){try{const d=JSON.parse(lsGet(ACC_PREFIX+k)||'null');return d&&d.profil&&d.profil.nama?d:null}catch(e){return null}},
+  simpanAkun(){
+   if(!this.akunKey||!this.profil)return false;
+   return lsSet(ACC_PREFIX+this.akunKey,JSON.stringify({profil:this.profil,data:this.data,notes:this.notes}))},
+  segarkanDaftar(){
+   const l=[];
+   try{for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);
+    if(k&&k.startsWith(ACC_PREFIX)){const id=k.slice(ACC_PREFIX.length),a=this.bacaAkun(id);if(a)l.push({key:id,nama:a.profil.nama,kontak:a.profil.kontak||'',foto:a.profil.foto||''})}}}catch(e){}
+   this.daftarAkun=l.sort((a,b)=>a.nama.localeCompare(b.nama))},
+  resetForm(){
+   this.form={UTBK:buatFormTryout('UTBK'),SKD:buatFormTryout('SKD')};
+   this.jasmaniForm={nama:'',gender:'PRIA',target:'',evaluasi:'',capaian:{PRIA:buatCapaian('PRIA'),WANITA:buatCapaian('WANITA')}};
+   this.error=''},
+  ambilLegacy(){ // data versi lama (tanpa akun) diadopsi oleh akun pertama
+   try{const raw=lsGet(STORAGE_KEY),n=lsGet(NOTES_KEY);if(!raw&&!n)return null;
+    let ns=[];try{ns=JSON.parse(n||'[]')}catch(e){}
+    return{data:this.rapikanData(JSON.parse(raw||'null')),notesSKD:Array.isArray(ns)?ns:[],foto:lsGet(FOTO_KEY)||''}}catch(e){return null}},
+  async pilihFoto(ev,target){
+   const file=ev.target.files&&ev.target.files[0];ev.target.value='';
+   if(!file)return;
+   try{target.foto=await kompresFoto(file)}
+   catch(e){const m=e.message||'Gagal memproses foto.';if(target===this.loginForm)this.errorLogin=m;else this.errorProfil=m}
+  },
+  bukaAkun(key,senyap){ // login ulang: muat profil, riwayat, dan catatan akun
+   const a=this.bacaAkun(key);if(!a)return;
+   this.akunKey=key;this.profil={...profilKosong(),...a.profil};
+   this.data=this.rapikanData(a.data);
+   const n=a.notes||{};this.notes={UTBK:Array.isArray(n.UTBK)?n.UTBK:[],SKD:Array.isArray(n.SKD)?n.SKD:[]};
+   lsSet(ACTIVE_KEY,key);
+   this.resetForm();this.catatanId=null;this.catatanStatus='';this.filterCatatan='Semua';
+   this.loginForm=profilKosong();this.errorLogin='';
+   if(!senyap)window.scrollTo(0,0);
+   this.$nextTick(()=>{if(chart)chart.resize();this.updateChart()});
+  },
+  masuk(){
+   const L=this.loginForm,errK=validasiKontak(L.metode,L.kontak);
+   if(errK){this.errorLogin=errK;return}
+   const key=kunciAkun(L.metode,L.kontak);
+   if(this.bacaAkun(key)){this.bukaAkun(key);return}
+   const err=validasiProfil(L);
+   if(err){this.errorLogin=err;return}
+   const legacy=this.daftarAkun.length===0?this.ambilLegacy():null;
+   this.akunKey=key;
+   this.profil={nama:L.nama.trim(),lahir:L.lahir,instansi:L.instansi.trim(),foto:L.foto||(legacy&&legacy.foto)||'',metode:L.metode,kontak:L.metode==='hp'?L.kontak.trim():L.kontak.trim().toLowerCase()};
+   this.data=legacy?legacy.data:{tryout:[],jasmani:[]};
+   this.notes={UTBK:[],SKD:legacy?legacy.notesSKD:[]};
+   if(!this.simpanAkun())this.tampilToast('Gagal menyimpan akun (penyimpanan diblokir/penuh)');
+   lsSet(ACTIVE_KEY,key);this.segarkanDaftar();
+   this.resetForm();this.catatanId=null;this.loginForm=profilKosong();this.errorLogin='';
+   window.scrollTo(0,0);this.$nextTick(()=>{if(chart)chart.resize();this.updateChart()});
+  },
+  bukaEditProfil(){this.editForm={...this.profil};this.errorProfil='';this.modalProfil=true},
+  simpanProfil(){
+   const err=validasiProfil(this.editForm);
+   if(err){this.errorProfil=err;return}
+   this.profil={...this.profil,nama:this.editForm.nama.trim(),lahir:this.editForm.lahir,instansi:this.editForm.instansi.trim(),foto:this.editForm.foto||''};
+   this.simpanAkun();this.segarkanDaftar();this.modalProfil=false;this.tampilToast('Profil diperbarui ✓')},
+  keluar(){ // Logout: hapus HANYA sesi aktif; profil, foto, riwayat & catatan akun tetap di localStorage
+   this.simpanCatatan(false);this.simpanAkun();
+   lsDel(ACTIVE_KEY);
+   this.catatanId=null;this.catatanStatus='';
+   this.profil=null;this.akunKey='';this.data={tryout:[],jasmani:[]};this.notes={UTBK:[],SKD:[]};
+   this.resetForm();this.kategori='UTBK';this.mode={UTBK:'input',SKD:'input'};
+   this.loginForm=profilKosong();this.errorLogin='';this.modalProfil=false;this.konfirmasi=false;
+   this.segarkanDaftar();window.scrollTo(0,0);this.updateChart()},
+
+  /* ===== form aktif ===== */
+  get kt(){return this.kategori==='SKD'?'SKD':'UTBK'},
+  get f(){return this.form[this.kt]},
+  get formAktif(){return this.kategori==='JASMANI'?this.jasmaniForm:this.f},
+  get evaluasiAktif(){return this.kategori==='JASMANI'?this.evaluasiJasmani:this.evaluasiTryout},
+  get petunjukAktif(){return this.kategori==='JASMANI'?this.petunjukJasmani:this.petunjukTryout},
+  simpan(){return this.kategori==='JASMANI'?this.simpanJasmani():this.simpanTryout()},
+
+  /* ===== tryout ===== */
+  get daftarSubtes(){return semuaSubtes(this.kt)},
+  terisi(k){return adaAngka(this.f.nilai[k])},
+  lulusSubtes(s){return toNum(this.f.nilai[s.kode])>=s.pg},
+  nilaiTerisi(l){return l.filter(s=>adaAngka(this.f.nilai[s.kode])).map(s=>toNum(this.f.nilai[s.kode]))},
+  rataGrup(g){const v=this.nilaiTerisi(g.subtes);return v.length?fmtNum(v.reduce((a,b)=>a+b,0)/v.length):'–'},
+  get jumlahTerisi(){return this.nilaiTerisi(this.daftarSubtes).length},
+  get total(){const v=this.nilaiTerisi(this.daftarSubtes),j=v.reduce((a,b)=>a+b,0);if(this.kt==='SKD')return j;return v.length?j/v.length:0},
+  get lengkap(){return this.kt==='SKD'?this.jumlahTerisi===this.daftarSubtes.length:this.jumlahTerisi>0},
+  get siapTryout(){if(!this.lengkap||!adaAngka(this.f.target))return false;return this.kt==='SKD'||adaAngka(this.f.passing)},
+  susunEntri(){
+   const f=this.f,skd=this.kt==='SKD';
+   return{kategori:this.kt,
+    subtes:this.daftarSubtes.filter(s=>adaAngka(f.nilai[s.kode])).map(s=>{const o={kode:s.kode,nama:s.nama,singkat:s.singkat||s.nama,nilai:toNum(f.nilai[s.kode])};if(s.pg!==undefined)o.pg=s.pg;return o}),
+    total:this.total,metode:skd?'jumlah':'rata-rata',target:toNum(f.target),passing:skd?SKD_PASSING_TOTAL:toNum(f.passing)}},
+  get evaluasiTryout(){return this.siapTryout?statusTryout(this.susunEntri()):null},
+  get petunjukTryout(){
+   if(!this.lengkap)return this.kt==='SKD'?'Isi nilai semua subtes untuk melihat hasil.':'Isi nilai minimal satu subtes untuk melihat hasil.';
+   if(!adaAngka(this.f.target))return'Isi Target Nilai untuk melihat hasil.';
+   return'Isi Passing Grade untuk melihat hasil.'},
+  simpanTryout(){
+   this.error='';const f=this.f;
+   if(!this.lengkap){this.error=this.kt==='SKD'?'Lengkapi nilai semua subtes terlebih dahulu.':'Isi nilai minimal satu subtes terlebih dahulu.';return}
+   if(this.daftarSubtes.some(s=>toNum(f.nilai[s.kode])<0)){this.error='Nilai subtes tidak boleh negatif.';return}
+   if(!adaAngka(f.target)||toNum(f.target)<0){this.error='Target Nilai wajib diisi (tidak boleh negatif).';return}
+   if(this.kt==='UTBK'&&(!adaAngka(f.passing)||toNum(f.passing)<0)){this.error='Passing Grade wajib diisi (tidak boleh negatif).';return}
+   const n=this.data.tryout.filter(e=>e.kategori===this.kt).length;
+   this.data.tryout.push({id:Date.now()+'-'+Math.random().toString(36).slice(2,7),tanggal:new Date().toISOString(),nama:f.nama.trim()||`Tryout ${this.kt} ${n+1}`,evaluasi:f.evaluasi.trim(),...this.susunEntri()});
+   this.simpanData();
+   f.nama='';f.evaluasi='';f.nilai=buatFormTryout(this.kt).nilai; // reset -> status netral
+   this.tampilToast('Hasil tryout tersimpan ✓')},
+
+  /* ===== jasmani ===== */
+  get daftarJasmani(){return JASMANI[this.jasmaniForm.gender]},
+  get capaianAktif(){return this.jasmaniForm.capaian[this.jasmaniForm.gender]},
+  nilaiCapaian(s){return parseCapaian(s,this.capaianAktif[s.kode])},
+  tidakValid(s){const r=String(this.capaianAktif[s.kode]==null?'':this.capaianAktif[s.kode]).trim();return r!==''&&isNaN(this.nilaiCapaian(s))},
+  skorItem(s){const v=this.nilaiCapaian(s);return isNaN(v)?null:konversiNilai(s,v)},
+  skorText(s){const k=this.skorItem(s);return k===null?'–':k},
+  get skorJasmani(){return this.daftarJasmani.map(s=>this.skorItem(s)).filter(k=>k!==null)},
+  get jumlahTerisiJ(){return this.skorJasmani.length},
+  get akumulasiJ(){return this.skorJasmani.reduce((a,b)=>a+b,0)},
+  get rataJ(){return this.jumlahTerisiJ?this.akumulasiJ/this.jumlahTerisiJ:null},
+  get lengkapJ(){return this.jumlahTerisiJ===this.daftarJasmani.length},
+  get siapJasmani(){return this.lengkapJ&&adaAngka(this.jasmaniForm.target)},
+  get evaluasiJasmani(){return this.siapJasmani?statusJasmani({total:this.rataJ,target:toNum(this.jasmaniForm.target)}):null},
+  get petunjukJasmani(){return this.lengkapJ?'Isi Target Nilai untuk melihat hasil.':'Isi capaian semua subtes untuk melihat hasil.'},
+  simpanJasmani(){
+   this.error='';const jf=this.jasmaniForm;
+   if(!this.lengkapJ){this.error=this.daftarJasmani.some(s=>this.tidakValid(s))?'Ada capaian yang formatnya tidak valid. Waktu harus lebih dari 0 (boleh koma, mis. 16,2).':'Lengkapi capaian semua subtes jasmani terlebih dahulu.';return}
+   const target=toNum(jf.target);
+   if(!adaAngka(jf.target)||target<0||target>100){this.error='Target Nilai Jasmani wajib diisi dengan angka 0–100.';return}
+   const items=this.daftarJasmani.map(s=>{const c=this.nilaiCapaian(s);return{kode:s.kode,nama:s.nama,satuan:s.satuan,unit:s.unit,capaian:c,nilai:konversiNilai(s,c)}});
+   const akumulasi=items.reduce((a,i)=>a+i.nilai,0);
+   this.data.jasmani.push({id:Date.now()+'-'+Math.random().toString(36).slice(2,7),tanggal:new Date().toISOString(),kategori:'JASMANI',gender:jf.gender,
+    nama:jf.nama.trim()||`Sesi ${this.data.jasmani.filter(e=>e.gender).length+1}`,evaluasi:jf.evaluasi.trim(),items,akumulasi,total:akumulasi/items.length,metode:'rata-rata',target});
+   this.simpanData();
+   jf.nama='';jf.evaluasi='';jf.capaian[jf.gender]=buatCapaian(jf.gender);
+   this.tampilToast('Nilai jasmani tersimpan ✓')},
+
+  /* ===== riwayat ===== */
+  statusEntri(h){return h.kategori==='JASMANI'?statusJasmani(h):statusTryout(h)},
+  get semuaRiwayat(){return[...this.data.tryout,...this.data.jasmani].sort((a,b)=>b.tanggal.localeCompare(a.tanggal))},
+  get riwayatTampil(){return this.filterRiwayat==='SEMUA'?this.semuaRiwayat:this.semuaRiwayat.filter(h=>h.kategori===this.filterRiwayat)},
+  rincian(h){
+   if(h.kategori==='JASMANI')return h.items.map(i=>({label:i.nama,nilai:i.nilai,gagal:false,ket:i.satuan!==undefined?`${fmtNum(i.capaian)} ${i.unit}`:''}));
+   return h.subtes.map(s=>({label:s.singkat||s.nama,nilai:s.nilai,gagal:s.pg!==undefined&&s.nilai<s.pg}))},
+  statCells(h){
+   if(h.kategori==='JASMANI'){
+    const s=h.total-h.target,sel={l:'Selisih',v:(s>=0?'+':'−')+fmtNum(Math.abs(s)),c:s>=0?'text-emerald-600':'text-rose-500'};
+    if(h.gender)return[{l:'Rata-rata',v:fmtNum(h.total)},{l:'Akumulasi',v:fmtNum(h.akumulasi)},{l:'Target',v:fmtNum(h.target)},sel];
+    return[{l:'Akumulasi',v:fmtNum(h.total)},{l:'Target',v:fmtNum(h.target)},sel]}
+   const k=h.kategori==='SKD'?{l:'Subtes Lulus',v:h.subtes.filter(s=>s.nilai>=s.pg).length+'/'+h.subtes.length}:{l:'Passing Grade',v:fmtNum(h.passing)};
+   return[{l:h.kategori==='UTBK'?'Nilai Akhir':'Nilai Total',v:fmtNum(h.total)},{l:'Target',v:fmtNum(h.target)},k]},
+  hapusEntri(h){
+   if(h.kategori==='JASMANI')this.data.jasmani=this.data.jasmani.filter(x=>x.id!==h.id);
+   else this.data.tryout=this.data.tryout.filter(x=>x.id!==h.id);
+   this.simpanData();this.tampilToast('Riwayat dihapus')},
+  get labelHapusSemua(){return this.filterRiwayat==='SEMUA'?'seluruh riwayat (UTBK, SKD, dan Jasmani)':`semua riwayat ${LABEL[this.filterRiwayat]}`},
+  hapusSemua(){
+   const k=this.filterRiwayat;
+   if(k==='SEMUA'){this.data.tryout=[];this.data.jasmani=[]}
+   else if(k==='JASMANI')this.data.jasmani=[];
+   else this.data.tryout=this.data.tryout.filter(e=>e.kategori!==k);
+   this.konfirmasi=false;this.simpanData();this.tampilToast('Riwayat dihapus')},
+
+  /* ===== statistik & storage ===== */
+  get dataKategori(){return this.kategori==='JASMANI'?this.data.jasmani.filter(e=>e.gender):this.data.tryout.filter(e=>e.kategori===this.kategori)},
+  get statsKategori(){
+   const l=this.dataKategori;if(!l.length)return{avg:'–',max:'–'};
+   const t=l.map(h=>h.total);return{avg:fmtNum(t.reduce((a,b)=>a+b,0)/t.length),max:fmtNum(Math.max(...t))}},
+  rapikanData(d){
+   const tryout=Array.isArray(d&&d.tryout)?d.tryout:[],jasmani=Array.isArray(d&&d.jasmani)?d.jasmani:[];
+   tryout.forEach(e=>{if(e.kategori==='UTBK'&&e.metode!=='rata-rata'&&Array.isArray(e.subtes)&&e.subtes.length){e.total=e.subtes.reduce((a,s)=>a+s.nilai,0)/e.subtes.length;e.metode='rata-rata'}});
+   jasmani.forEach(e=>{e.kategori='JASMANI'});
+   return{tryout,jasmani}},
+  simpanData(){this.simpanAkun();this.updateChart()},
+
+  /* ===== BUKU CATATAN (UTBK & SKD), tersimpan per akun ===== */
+  get modeCatatan(){return this.kategori!=='JASMANI'&&this.mode[this.kategori]==='catatan'},
+  get labelCatatan(){return LABEL_CATATAN[this.kt]},
+  get daftarCatatan(){
+   return this.notes[this.kt].filter(n=>this.filterCatatan==='Semua'||n.label===this.filterCatatan).sort((a,b)=>b.updated.localeCompare(a.updated))},
+  tulisCatatan(){return this.simpanAkun()},
+  isiEditor(){const n=(this.notes[this.catatanKat]||[]).find(x=>x.id===this.catatanId);if(this.$refs.ed)this.$refs.ed.innerHTML=n?n.html:''},
+  tutupCatatan(){this.simpanCatatan(false);this.catatanId=null;this.catatanStatus='';this.filterCatatan='Semua';this.konfirmHapus=null},
+  catatanBaru(){
+   this.simpanCatatan(false);
+   const n={id:Date.now()+'-'+Math.random().toString(36).slice(2,7),judul:'',label:this.labelCatatan.includes(this.filterCatatan)?this.filterCatatan:'Umum',html:'',updated:new Date().toISOString()};
+   this.notes[this.kt].push(n);this.tulisCatatan();this.bukaCatatan(n.id,true);
+   this.$nextTick(()=>this.$refs.ed&&this.$refs.ed.focus())},
+  bukaCatatan(id,lewati){
+   if(!lewati)this.simpanCatatan(false);
+   const n=this.notes[this.kt].find(x=>x.id===id);if(!n)return;
+   this.catatanKat=this.kt;this.catatanId=id;this.catatan={judul:n.judul,label:n.label};this.catatanStatus='Tersimpan';this.konfirmHapus=null;
+   this.$nextTick(()=>this.isiEditor())},
+  tandaiUbah(){this.catatanStatus='Menyimpan…';clearTimeout(saveTimer);saveTimer=setTimeout(()=>this.simpanCatatan(false),700)},
+  simpanCatatan(manual){
+   clearTimeout(saveTimer);
+   const n=this.profil&&this.catatanId&&(this.notes[this.catatanKat]||[]).find(x=>x.id===this.catatanId);
+   if(!n||!this.$refs.ed)return;
+   n.judul=this.catatan.judul.trim();n.label=this.catatan.label;n.html=this.$refs.ed.innerHTML;n.updated=new Date().toISOString();
+   const ok=this.tulisCatatan();
+   this.catatanStatus=ok?'Tersimpan':'Gagal menyimpan (penyimpanan penuh/diblokir)';
+   if(manual)this.tampilToast(ok?'Catatan tersimpan ✓':'Gagal menyimpan catatan')},
+  hapusCatatan(id){
+   this.notes[this.kt]=this.notes[this.kt].filter(x=>x.id!==id);this.tulisCatatan();this.konfirmHapus=null;
+   if(this.catatanId===id){this.catatanId=null;this.catatanStatus=''}
+   this.tampilToast('Catatan dihapus')},
+  fmt(cmd,val){ // toolbar rich text
+   const ed=this.$refs.ed;if(!ed)return;
+   ed.focus();
+   try{document.execCommand('styleWithCSS',false,true)}catch(e){}
+   if(cmd==='hiliteColor'&&!document.execCommand('hiliteColor',false,val))document.execCommand('backColor',false,val);
+   else if(cmd!=='hiliteColor')document.execCommand(cmd,false,val||null);
+   this.tandaiUbah()},
+  reset(){
+   const ed=this.$refs.ed;if(!ed)return;ed.focus();
+   document.execCommand('removeFormat');document.execCommand('hiliteColor',false,'transparent');
+   this.tandaiUbah()},
+
+  /* ===== chart ===== */
+  buatChart(){
+   chart=new Chart(document.getElementById('chartUtama').getContext('2d'),{
+    type:'line',
+    data:{labels:[],datasets:[
+     {label:'Nilai',data:[],borderColor:'#6366f1',backgroundColor:'rgba(99,102,241,.08)',fill:true,tension:.35,borderWidth:3,pointRadius:6,pointHoverRadius:8,pointBorderWidth:2,pointBorderColor:'#fff',pointBackgroundColor:[]},
+     {label:'Target Nilai',data:[],borderColor:'#10b981',borderDash:[6,6],borderWidth:2,pointRadius:3,pointBackgroundColor:'#10b981',tension:.2,fill:false},
+     {label:'Passing Grade',data:[],borderColor:'#f43f5e',borderDash:[2,5],borderWidth:2,pointRadius:3,pointBackgroundColor:'#f43f5e',tension:.2,fill:false,omit:false}]},
+    options:{responsive:true,maintainAspectRatio:false,animation:{duration:700,easing:'easeOutQuart'},interaction:{mode:'index',intersect:false},
+     plugins:{legend:{position:'bottom',labels:{usePointStyle:true,boxWidth:8,color:'#64748b',font:{size:12},filter:(i,d)=>!d.datasets[i.datasetIndex].omit}},
+      tooltip:{backgroundColor:'#0f172a',padding:12,cornerRadius:10,callbacks:{afterBody:items=>{const h=this.dataKategori[items[0].dataIndex];return h?['','Status: '+this.statusEntri(h).label]:[]}}}},
+     scales:{x:{grid:{display:false},ticks:{color:'#94a3b8',font:{size:11},maxRotation:0,autoSkip:true}},y:{beginAtZero:true,grid:{color:'#f1f5f9'},ticks:{color:'#94a3b8',font:{size:11}}}}}});
+  },
+  updateChart(){
+   if(!chart)return;
+   const l=this.dataKategori,j=this.kategori==='JASMANI',[a,t,p]=chart.data.datasets;
+   chart.data.labels=l.map(x=>x.nama);
+   a.label=this.kategori==='UTBK'?'Nilai Akhir (rata-rata)':this.kategori==='SKD'?'Nilai Total':'Rata-rata Nilai Jasmani';
+   a.data=l.map(x=>x.total);a.pointBackgroundColor=l.map(x=>this.statusEntri(x).tema.hex);
+   t.data=l.map(x=>x.target);
+   chart.options.scales.y.max=j?100:undefined;
+   p.omit=j;p.hidden=j;p.label=this.kategori==='SKD'?'Passing Grade (total subtes)':'Passing Grade';
+   p.data=j?[]:l.map(x=>x.passing);
+   chart.update();
+  }
+ };
+}
+</script>
+</body>
+</html>
